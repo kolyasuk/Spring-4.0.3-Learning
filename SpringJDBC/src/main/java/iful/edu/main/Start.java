@@ -1,5 +1,7 @@
 package iful.edu.main;
 
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,7 +16,9 @@ public class Start {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 		SQLiteDao mp3Dao = (SQLiteDao) context.getBean("sqliteDao");
-		System.out.println(mp3Dao.getinsertID("111", "111"));
+		for(Map.Entry<String, Integer> x : mp3Dao.getGroupValues().entrySet()) {
+			System.out.println(x.getKey()+" - "+x.getValue());
+		}
 
 	}
 

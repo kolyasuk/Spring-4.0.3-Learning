@@ -1,10 +1,16 @@
 package iful.edu.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -79,6 +85,7 @@ public class SQLiteDao implements MP3Dao {
 		return jdbcTemplate.getJdbcOperations().queryForObject(sql, Integer.class);
 	}
 
+	//getting object by MP3RowMapper | possibly use ResultSetExtractor
 	private Object myExecute(String fieldName, String fieldValue) {
 		String sql = "select * from mp3 where " + fieldName + "=:field";
 		MapSqlParameterSource param = new MapSqlParameterSource("field", fieldValue);
@@ -86,13 +93,29 @@ public class SQLiteDao implements MP3Dao {
 		return jdbcTemplate.query(sql, param, new MP3RowMapper());
 	}
 
+	//getting id by PreparedStatementCreator
 	public int getinsertID(String name, String author) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		String sql = "insert into mp3 (name, author) VALUES (?, ?)";
 
 		jdbcTemplate.getJdbcOperations().update(new Mp3PreparedStatementCreator(sql, name, author), keyHolder);
 		return keyHolder.getKey().intValue();
-
+	}
+	
+	//filling map by ResultSetExtractor | possibly use MP3RowMapper
+	public Map<String, Integer> getGroupValues(){
+		String sql = "select author, count(*) as count from mp3 group by author";
+		
+		return jdbcTemplate.query(sql, new ResultSetExtractor<Map<String, Integer>>() {
+			@Override
+			public Map<String, Integer> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				Map<String, Integer> map = new TreeMap<>();
+				while(rs.next()) {
+					map.put(rs.getString("author"), rs. getInt("count"));
+				}
+				return map;
+			}
+		});
 	}
 
 }
