@@ -16,8 +16,8 @@ public class Start {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 		SQLiteDao mp3Dao = (SQLiteDao) context.getBean("sqliteDao");
-		for(Map.Entry<String, Integer> x : mp3Dao.getGroupValues().entrySet()) {
-			System.out.println(x.getKey()+" - "+x.getValue());
+		for (Map.Entry<String, Integer> x : mp3Dao.getGroupValues().entrySet()) {
+			System.out.println(x.getKey() + " - " + x.getValue());
 		}
 
 	}

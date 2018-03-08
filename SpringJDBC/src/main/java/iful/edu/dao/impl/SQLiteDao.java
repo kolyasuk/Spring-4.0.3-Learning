@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 import iful.edu.dao.interfaces.MP3Dao;
 import iful.edu.objects.MP3RowMapper;
 import iful.edu.objects.Mp3;
-import iful.edu.objects.Mp3PreparedStatementCreator;
 
 @Component("sqliteDao")
 public class SQLiteDao implements MP3Dao {
@@ -85,7 +84,7 @@ public class SQLiteDao implements MP3Dao {
 		return jdbcTemplate.getJdbcOperations().queryForObject(sql, Integer.class);
 	}
 
-	//getting object by MP3RowMapper | possibly use ResultSetExtractor
+	// getting object by MP3RowMapper | possibly use ResultSetExtractor
 	private Object myExecute(String fieldName, String fieldValue) {
 		String sql = "select * from mp3 where " + fieldName + "=:field";
 		MapSqlParameterSource param = new MapSqlParameterSource("field", fieldValue);
@@ -93,25 +92,28 @@ public class SQLiteDao implements MP3Dao {
 		return jdbcTemplate.query(sql, param, new MP3RowMapper());
 	}
 
-	//getting id by PreparedStatementCreator
-	public int getinsertID(String name, String author) {
+	// if used JdbcTemplate need to use PreparedStatementCreator
+	public int getInsertID(String name, String author) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		String sql = "insert into mp3 (name, author) VALUES (?, ?)";
+		String sql = "insert into mp3 (name, author) VALUES (:name, :author)";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("name", name);
+		param.addValue("author", author);
+		jdbcTemplate.update(sql, param, keyHolder);
 
-		jdbcTemplate.getJdbcOperations().update(new Mp3PreparedStatementCreator(sql, name, author), keyHolder);
 		return keyHolder.getKey().intValue();
 	}
-	
-	//filling map by ResultSetExtractor | possibly use MP3RowMapper
-	public Map<String, Integer> getGroupValues(){
+
+	// filling map by ResultSetExtractor | possibly use MP3RowMapper
+	public Map<String, Integer> getGroupValues() {
 		String sql = "select author, count(*) as count from mp3 group by author";
-		
+
 		return jdbcTemplate.query(sql, new ResultSetExtractor<Map<String, Integer>>() {
 			@Override
 			public Map<String, Integer> extractData(ResultSet rs) throws SQLException, DataAccessException {
 				Map<String, Integer> map = new TreeMap<>();
-				while(rs.next()) {
-					map.put(rs.getString("author"), rs. getInt("count"));
+				while (rs.next()) {
+					map.put(rs.getString("author"), rs.getInt("count"));
 				}
 				return map;
 			}
