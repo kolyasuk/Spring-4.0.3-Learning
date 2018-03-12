@@ -9,17 +9,17 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<context:component-scan base-package="iful.edu.*"></context:component-scan>
-	<tx:annotation-driven proxy-target-class="true"
-		transaction-manager="transactionManager" />
+	<!-- <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" 
+		/> -->
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<import resource="transaction.xml" />
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-		p:driverClassName="org.sqlite.JDBC" p:url="jdbc:sqlite:db\MusicDB.db"
-		p:username="" p:password="" />
+	<aop:config proxy-target-class="true">
+		<aop:aspect id="aspectCheckTransaction" ref="checkTransaction">
+			<aop:pointcut expression="execution (* iful.edu.dao.impl.*.insert*(..))" id="insertMethods" />
+			<aop:before pointcut-ref="insertMethods"  method="checkTransactionActive" />
+		</aop:aspect>
+	</aop:config>
+
 
 </beans>

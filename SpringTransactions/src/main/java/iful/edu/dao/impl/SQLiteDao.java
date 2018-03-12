@@ -16,8 +16,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import iful.edu.dao.interfaces.MP3Dao;
 import iful.edu.objects.Author;
@@ -35,7 +33,7 @@ public class SQLiteDao implements MP3Dao {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	// @Transactional(propagation = Propagation.REQUIRED)
 	public void insert(Mp3 mp3) {
 		int authorId = insertAuthor(mp3.getAuthor());
 
@@ -47,7 +45,9 @@ public class SQLiteDao implements MP3Dao {
 	}
 
 	// if used JdbcTemplate need to use PreparedStatementCreator
-	@Transactional(propagation = Propagation.MANDATORY)
+
+	// @Transactional(propagation = Propagation.MANDATORY,
+	// isolation=Isolation.SERIALIZABLE, timeout=1)
 	public int insertAuthor(Author author) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		String sql = "insert into author (name) VALUES (:name)";

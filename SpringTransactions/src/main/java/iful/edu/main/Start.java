@@ -11,18 +11,17 @@ public class Start {
 	public static void main(String[] args) {
 
 		Author author2 = new Author();
-		author2.setName("222");
+		author2.setName("testAuthorName");
 		Mp3 mp32 = new Mp3();
-		mp32.setName("222");
+		mp32.setName("testMP3Name");
 		mp32.setAuthor(author2);
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
 		SQLiteDao mp3Dao = (SQLiteDao) context.getBean("sqliteDao");
 
 		/*
-		 * for (Map.Entry<String, Integer> x :
-		 * mp3Dao.getGroupValues().entrySet()) { System.out.println(x.getKey() +
-		 * " - " + x.getValue()); }
+		 * for (Map.Entry<String, Integer> x : mp3Dao.getGroupValues().entrySet()) {
+		 * System.out.println(x.getKey() + " - " + x.getValue()); }
 		 */
 
 		mp3Dao.insert(mp32);

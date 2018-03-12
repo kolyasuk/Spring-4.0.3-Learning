@@ -16,14 +16,17 @@ import org.springframework.stereotype.Component;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLoger {
 
+	// advice
 	@Pointcut("execution(* iful.edu.interfaces.Manager.*(..))")
 	private void meth() {
 	}
 
+	// advice
 	@Pointcut("@annotation(iful.edu.annotation.ShowResult)")
 	private void showResult() {
 	}
 
+	// advice
 	@Pointcut("@annotation(iful.edu.annotation.ShowTime)")
 	private void showTime() {
 
