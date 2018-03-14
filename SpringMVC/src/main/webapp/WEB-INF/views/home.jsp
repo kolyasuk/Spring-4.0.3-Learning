@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page session="false"%>
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8"%>
 <html>
 
 <head>
@@ -15,10 +16,10 @@
 		<div class="container">
 			<h1>Welcome</h1>
 
-			<form class="form">
-				<input type="text" placeholder="Username"> <input
-					type="password" placeholder="Password">
-				<button type="submit" id="login-button">Login</button>
+			<form class="form" method="post" action="check-user">
+				<input type="text" placeholder="Username" required> <input
+					type="password" placeholder="Password" required>
+				<button type="submit" id="login-button" title="Click to login">Login</button>
 			</form>
 		</div>
 
@@ -37,7 +38,7 @@
 	</div>
 	<script
 		src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="<c:url value="/resources/js/index.js"/>"></script>
+
 </body>
 
 </html>
