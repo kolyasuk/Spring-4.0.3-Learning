@@ -2,6 +2,7 @@
 <%@ page session="false"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java"
 	pageEncoding="UTF-8"%>
+	<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <html>
 
 <head>
@@ -16,11 +17,15 @@
 		<div class="container">
 			<h1>Welcome</h1>
 
-			<form class="form" method="post" action="check-user">
-				<input type="text" placeholder="Username" required> <input
-					type="password" placeholder="Password" required>
+
+			<form:form cssClass="form" method="POST" commandName="user" action="check-user">
+				<form:input cssClass="stle" path="name"/> 
+				<form:errors path="name"></form:errors>
+				<form:input cssClass="stle" path="password"/>
+				<form:errors path="password"></form:errors><br>
+				<form:label path="">Admin<form:checkbox path="admin"/></form:label>
 				<button type="submit" id="login-button" title="Click to login">Login</button>
-			</form>
+			</form:form>
 		</div>
 
 		<ul class="bg-bubbles">
