@@ -4,9 +4,9 @@ import javax.validation.constraints.Size;
 
 public class User {
 
-	@Size(min = 5, max = 10, message = "Більше 5 i менше 10")
+	@Size(min = 5, max = 10, message = "{name.size.error}")
 	private String name;
-	@Size(min = 5, max = 10, message = "Більше 5 i менше 10")
+	@Size(min = 5, max = 10, message = "{password.size.error}")
 	private String password;
 	private boolean admin;
 

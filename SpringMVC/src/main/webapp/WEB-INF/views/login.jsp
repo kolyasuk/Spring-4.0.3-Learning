@@ -3,6 +3,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"
 	pageEncoding="UTF-8"%>
 	<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+	<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <html>
 
 <head>
@@ -15,16 +16,21 @@
 
 	<div class="wrapper">
 		<div class="container">
-			<h1>Welcome</h1>
+			<h1><spring:message code="greeting"/></h1>
 
 
 			<form:form cssClass="form" method="POST" commandName="user" action="check-user">
+			
+				<form:label path="name"> <spring:message code="name"/> </form:label>
 				<form:input cssClass="stle" path="name"/> 
-				<form:errors path="name"></form:errors>
+				<form:errors path="name" cssStyle="color:red;"></form:errors></br>
+				
+				<form:label path="password"> <spring:message code="password"/> </form:label>
 				<form:input cssClass="stle" path="password"/>
-				<form:errors path="password"></form:errors><br>
-				<form:label path="">Admin<form:checkbox path="admin"/></form:label>
-				<button type="submit" id="login-button" title="Click to login">Login</button>
+				<form:errors path="password" cssStyle="color:red;"></form:errors><br>
+				
+				<form:label path="admin"> <spring:message code="admin"/> <form:checkbox path="admin"/> </form:label>
+				<button type="submit" id="login-button" title="Click to login"><spring:message code="login"/> </button>
 			</form:form>
 		</div>
 

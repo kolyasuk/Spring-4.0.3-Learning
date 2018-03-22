@@ -14,13 +14,17 @@ import iful.edu.spring.objects.Calculator;
 import iful.edu.spring.objects.User;
 
 @Controller
+// @SessionAttributes("user") // save user to session
 public class LoginController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView main() {
+		User user = new User();
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("home");
-		mv.addObject("user", new User());
+		user.setName("123");
+		user.setPassword("123");
+		mv.setViewName("login");
+		mv.addObject("user", user);
 		return mv;
 	}
 
@@ -28,13 +32,14 @@ public class LoginController {
 	public ModelAndView checkUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, HttpServletRequest request) {
 
 		if (bindingResult.hasErrors()) {
-			return new ModelAndView("home");
+			return new ModelAndView("login");
 		}
+
+		request.getSession().setAttribute("user", user);
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("main");
 
-		request.getSession().setAttribute("user", user);
 		mv.addObject("user", request.getSession().getAttribute("user"));
 
 		mv.addObject("calc", new Calculator());
