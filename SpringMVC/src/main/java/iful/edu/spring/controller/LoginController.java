@@ -1,6 +1,7 @@
 package iful.edu.spring.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,8 @@ import iful.edu.spring.objects.User;
 public class LoginController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView main() {
+	public ModelAndView main(HttpServletRequest request, HttpServletResponse response) {
+
 		User user = new User();
 		ModelAndView mv = new ModelAndView();
 		user.setName("123");
