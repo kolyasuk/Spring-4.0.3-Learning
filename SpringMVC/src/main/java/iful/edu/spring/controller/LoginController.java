@@ -1,65 +1,62 @@
 package iful.edu.spring.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
-import iful.edu.spring.objects.Calculator;
 import iful.edu.spring.objects.User;
 
 @Controller
-// @SessionAttributes("user") // save user to session
+@SessionAttributes("user") // save user to session
 public class LoginController {
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView main(HttpServletRequest request, HttpServletResponse response) {
+	public static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-		User user = new User();
-		ModelAndView mv = new ModelAndView();
-		user.setName("123");
-		user.setPassword("123");
-		mv.setViewName("login");
-		mv.addObject("user", user);
-		return mv;
+	@ModelAttribute
+	public User createNewUser(HttpServletRequest request) {
+		return new User();
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String main(@ModelAttribute User user, HttpServletRequest request, HttpServletResponse response) {
+		return "login";
 	}
 
 	@RequestMapping(value = "/check-user", method = RequestMethod.POST)
-	public ModelAndView checkUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, HttpServletRequest request) {
-
-		if (bindingResult.hasErrors()) {
-			return new ModelAndView("login");
+	public ModelAndView checkUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+		if (!bindingResult.hasErrors()) {
+			redirectAttributes.addFlashAttribute("redirect", "FlashAttribute");
+			ModelAndView mv = new ModelAndView();
+			mv.setViewName("redirect:/mainpage");
+			return mv;
 		}
 
-		request.getSession().setAttribute("user", user);
-
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("main");
-
-		mv.addObject("user", request.getSession().getAttribute("user"));
-
-		mv.addObject("calc", new Calculator());
-
-		return mv;
+		return new ModelAndView("login");
 	}
 
-	@RequestMapping(value = "/calculator", method = RequestMethod.POST)
-	public ModelAndView calcul(@ModelAttribute("calc") Calculator calc) {
-
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("main");
-
-		int result = calc.getArg1() + calc.getArg2();
-
-		mv.addObject("result", result);
-
-		return mv;
+	@RequestMapping(value = "/mainpage", method = RequestMethod.GET)
+	public String goMain(HttpServletRequest request) {
+		Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+		if (map != null) {
+			logger.info("redirect!");
+		} else {
+			logger.info("refresh");
+		}
+		return "main";
 	}
 
 	@RequestMapping("/failed")

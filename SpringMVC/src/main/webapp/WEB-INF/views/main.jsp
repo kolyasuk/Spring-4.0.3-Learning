@@ -13,13 +13,8 @@
 	<p>Password: ${user.password}</p>
 	<p>isAdmin: ${user.admin}</p>
 
-	<form:form method="POST" commandName="calc" action="calculator">
-		<form:input path="arg1"/>
-		<label>+</label>
-		<form:input path="arg2"/>
-		<button type="submit" id="login" title="Click to login">Calculate</button>
-	</form:form>
-	Result: ${result}<br>
+	<p> ${redirect}</p>
+
 	Controller worked ${endTime} ms.
 
 </body>
